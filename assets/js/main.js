@@ -13,32 +13,21 @@ const overDiscount = 40;
 const overAge = 65;
 
 
-// * INSERISCO NELLA SELECT IL VALORE PER GLI OVER IN MODO CHE SI POSSA MODIFICARE L'ETÁ PER LO SCONTO OVER TRAMITE JS
-const overAgeValue = document.querySelector('select');
-// ? CERCO QUALE È LA OPTION A CUI CAMBIARE IL TESTO DINAMICAMENTE. LASCEREI IL CICLO SE DOVESSI FARE UNA COSA PIU COMPLESSA ED ACCETTARE ETA DIVERSE TRAMITE INPUT NUMERICO (COMMIT PRECEDENTE), MA CON LA SELECT POSSO PERMETTERMI DI ANDARE DIRETTAMENTE ALL'ELMENTO INTERESSATO
-// overAgeValue.childNodes.forEach((element) => {
-//     if (element.value === 'over') element.innerText += overAge
-// })
-overAgeValue.childNodes[5].innerText += overAge;
-
-
 // * INPUT PER INFORMAZIONI RICAVATE DALL'UTENTE
 const inputUserName = document.getElementById('userName');
-// console.debug('inputUserName', inputUserName);
 const inputUserAge = document.getElementById('userAge');
-// console.debug('inputUserAge', inputUserAge);
+// * INSERISCO NELLA SELECT IL VALORE PER GLI OVER IN MODO CHE SI POSSA MODIFICARE L'ETÁ PER LO SCONTO OVER TRAMITE JS
+// ? CERCO QUALE È LA OPTION A CUI CAMBIARE IL TESTO DINAMICAMENTE. LASCEREI IL CICLO SE DOVESSI FARE UNA COSA PIU COMPLESSA ED ACCETTARE ETA DIVERSE TRAMITE INPUT NUMERICO (COMMIT PRECEDENTE), MA CON LA SELECT POSSO PERMETTERMI DI ANDARE DIRETTAMENTE ALL'ELMENTO INTERESSATO
+// overAgeValue.childNodes.forEach((element) => {
+//     if (element.value === 'over') element.innerText += overAge;
+// });
+inputUserAge.childNodes[5].innerText += overAge;
 const inputTripKM = document.getElementById('tripKM');
-// console.debug('inputTripKM', inputTripKM);
 
 
 // * ELEMENTI AI QUALI REAGIRE
-// ! FORSE NON UTILIZZERÓ IL FORM
-const formUserInputs = document.getElementById('userInputs');
-// console.debug('formUserInputs', formUserInputs);
 const btnCalculateTicketPrice = document.getElementById('calculateTicketPrice');
-// console.debug('btnCalculateTicketPrice', btnCalculateTicketPrice);
 const btnCancelInfo = document.getElementById('cancelInfo');
-// console.debug('btnCancelInfo', btnCancelInfo);
 btnCalculateTicketPrice.addEventListener('click', function() {
     calculateTicketPrice(inputUserName.value, inputUserAge.value, minorsDiscount, overDiscount, inputTripKM.value, ticketPriceForKM);
 })
@@ -47,29 +36,20 @@ btnCancelInfo.addEventListener('click', function() {
 })
 
 
-// * ELEMENTI IN CUI MOSTRARE RISULTATO
+// * ELEMENTI IN CUI MOSTRARE RISULTATI
+const userNameError = document.getElementById('userNameError');;
+const tripKMError = document.getElementById('tripKMError');;
 const results = document.getElementById('results');
 const ticketUserName = document.getElementById('ticketUserName');
 const ticketOfferType = document.getElementById('ticketOfferType');
 const ticketTicketPrice = document.getElementById('ticketTicketPrice');
-const userNameError = document.getElementById('userNameError');;
-const tripKMError = document.getElementById('tripKMError');;
 
 
 // * FUNZIONE CHE CALCOLA IL PREZZO
 function calculateTicketPrice(userName, userAge, minorsDiscount, overDiscount, tripKM, ticketPriceForKM) {
     tripKM = parseInt(tripKM);
 
-    // console.warn("___________")
-    // console.debug('userName', userName);
-    // console.debug('userAge', userAge);
-    // console.debug('minorsDiscount', minorsDiscount);
-    // console.debug('overDiscount', overDiscount);
-    // console.debug('tripKM', tripKM);
-    // console.debug('ticketPriceForKM', ticketPriceForKM);
-    // console.warn("___________")
-
-    // todo CONTROLLARE SE CI SONO ERRORI E MOSTRARLI ALL'UTENTE (DOPO AVER FATTO LA PARTE DEL CALCOLO SUPPONENDO DI AVERE I DATI CORRETTI)
+    // * CONTROLLO LA PRESENZA DI ERRORI: NOME VUOTO E KM VUOTI O NON NUMERICI (LA SELECT AVRA SEMPRE UN VALORE ACCETTABILE)
     let error = false;
     if (!userName) {
         console.debug("ERRORE USER NAME");
@@ -92,15 +72,15 @@ function calculateTicketPrice(userName, userAge, minorsDiscount, overDiscount, t
         tripKMError.classList.add('d-none');
     };
     if (error === true) {
+        results.classList.add('d-none');
         return;
     };
 
-    const priceMessage = `Ciao ${userName}, il costo del tuo biglietto è:`;
-
+    // * CALCOLO EFFETTIVO DEL COSTO DEL BIGLIETTO
     let ticketPrice = tripKM * ticketPriceForKM;
     // * LA SALVO IN UN'ALTRA VARIABILE PER AVERE A DISPOSIZIONE ANCHE IL PREZZO INIZIALE DA MOSTRARE SE VIENE APPLICATO UNO SCONTO
     let finalPrice = ticketPrice;
-
+    // * APPLICO EVENTUALI SCONTI
     if (userAge === 'minor') {
         finalPrice = calculateDiscountedPrice(ticketPrice, minorsDiscount);
         console.log(`Prezzo non scontato: ${ticketPrice.toFixed(2)}€`);
@@ -110,8 +90,10 @@ function calculateTicketPrice(userName, userAge, minorsDiscount, overDiscount, t
         console.log(`Prezzo non scontato: ${ticketPrice.toFixed(2)}€`);
     };
 
-    console.info(`${priceMessage} ${finalPrice.toFixed(2)}€`);
+    // * MOSTRO IL RISULTATO IN CONSOLE (MILESTONE 1)
+    console.info(`Ciao ${userName}, il costo del tuo biglietto è: ${finalPrice.toFixed(2)}€`);
 
+    // * MOSTRO IL RISULTATO IN PAGINA (MILESTONE 2)
     showResults(userName, userAge, overAge, ticketPrice, finalPrice);
 }
 
@@ -125,9 +107,6 @@ function calculateTicketPrice(userName, userAge, minorsDiscount, overDiscount, t
  * @returns {number} Nuovo prezzo con lo sconto applicato
  */
 function calculateDiscountedPrice(initialPrice, discountAmount) {
-    // console.debug('initialPrice', initialPrice);
-    // console.debug('discountAmount', discountAmount);
-
     return initialPrice = initialPrice - (initialPrice / 100 * discountAmount);
 }
 
@@ -145,8 +124,8 @@ function calculateDiscountedPrice(initialPrice, discountAmount) {
 function showResults(userName, userAge, overAge, ticketPrice, finalPrice) {
     ticketUserName.innerText = userName;
 
+    // * MODIFICO SE NECESSARIO IL TESTO DA MOSTRARE NELLA CASELLA "OFFERTA" E LO INSERISCO
     let userAgeMSG = userAge;
-
     if (userAgeMSG === 'minor') {
         userAgeMSG = 'minorenni'
     };
@@ -155,18 +134,22 @@ function showResults(userName, userAge, overAge, ticketPrice, finalPrice) {
     };
     ticketOfferType.innerText = `Biglietto ${userAgeMSG}`;
 
+    // * INSERISCO IL PREZZO DEL BIGLIETTO NELLA CASELLA
+    // * SE IL PREZZO È STATO SCONTATO MOSTRO ANCHE IL PREZZO ORIGINALE
     userAge === 'standard' ? ticketTicketPrice.innerText = `${finalPrice.toFixed(2)}€` : ticketTicketPrice.innerHTML = `<del>${ticketPrice.toFixed(2)}€</del><br/>${finalPrice.toFixed(2)}€`;
 
+    // * MOSTRO LA CARD CON I RISULTATI
     if (results.classList.contains('d-none')) results.classList.remove('d-none');
 };
 
 
 
+// * FUNZIONE CHE SVUOTA GLI INPUT E NASCONDE I RISULTATI
 function cancelInfo() {
     inputUserName.value = "";
     inputUserName.focus();
     inputUserAge.value = 'standard';
     inputTripKM.value = 0;
 
-    if (!results.classList.contains('d-none')) results.classList.add('d-none');
+    results.classList.add('d-none');
 };
