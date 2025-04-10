@@ -50,12 +50,11 @@
     <main>
         <section>
             <div class="container">
-                <div class="row">
-                    <div class="col-12">
+                <div class="row gy-5">
+                    <div class="col-12 col-lg-8">
                         <h1>
                             JS Biglietto treno
                         </h1>
-
 
                         <form id="userInputs" class="my-5">
                             <input name="userName" type="text" id="userName" />
@@ -76,8 +75,66 @@
                         <button id="calculateTicketPrice" class="btn btn-success">
                             Calcola il prezzo del biglietto
                         </button>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div id="results" class="card d-none">
+                            <!-- <div id="results" class="card"> -->
+                            <div class="card-header text-center">
+                                <h2>
+                                    IL TUO BIGLETTO
+                                </h2>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="p-3">
+                                        <h5>
+                                            NOME PASSEGGERO
+                                        </h5>
+                                        <p class="mb-0" id="ticketUserName">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-9">
+                                    <table class="table table-bordered mb-0 h-100">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">
+                                                    Offerta
+                                                </th>
+                                                <th scope="col">
+                                                    Carrozza
+                                                </th>
+                                                <th scope="col">
+                                                    Codice CP
+                                                </th>
+                                                <th scope="col">
+                                                    Costo biglietto
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <!-- <th scope="row">
 
+                                                </th> -->
+                                                <td id="ticketOfferType">
 
+                                                </td>
+                                                <td>
+                                                    5
+                                                </td>
+                                                <td>
+                                                    92911
+                                                </td>
+                                                <td id="ticketTicketPrice">
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

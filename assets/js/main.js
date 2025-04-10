@@ -42,6 +42,13 @@ btnCalculateTicketPrice.addEventListener('click', function() {
 })
 
 
+// * ELEMENTI IN CUI MOSTRARE RISULTATO
+const results = document.getElementById('results');
+const ticketUserName = document.getElementById('ticketUserName');
+const ticketOfferType = document.getElementById('ticketOfferType');
+const ticketTicketPrice = document.getElementById('ticketTicketPrice');
+
+
 // * FUNZIONE CHE CALCOLA IL PREZZO
 function calculateTicketPrice(userName, userAge, minorsDiscount, overDiscount, tripKM, ticketPriceForKM) {
     tripKM = parseInt(tripKM);
@@ -73,6 +80,8 @@ function calculateTicketPrice(userName, userAge, minorsDiscount, overDiscount, t
     };
 
     console.info(`${priceMessage} ${finalPrice.toFixed(2)}€`);
+
+    showResults(userName, userAge, overAge, ticketPrice, finalPrice);
 }
 
 
@@ -90,3 +99,31 @@ function calculateDiscountedPrice(initialPrice, discountAmount) {
 
     return initialPrice = initialPrice - (initialPrice / 100 * discountAmount);
 }
+
+
+
+// * FUNZIONE CHE MOSTRA SULLO SCHERMO I RISULTATI
+/**
+ * 
+ * @param {string} userName Nome dell'utente da mettere sul biglietto
+ * @param {string} userAge Tipo di tariffa applicata (Standard/Minor/Over)
+ * @param {number} ticketPrice Prezzo del biglietto senza sconti applicati
+ * @param {number} finalPrice Prezzo del biglietto con eventuali sconti applicati
+ */
+function showResults(userName, userAge, overAge, ticketPrice, finalPrice) {
+    ticketUserName.innerText = userName;
+
+    let userAgeMSG = userAge;
+
+    if (userAgeMSG === 'minor') {
+        userAgeMSG = 'minorenni'
+    };
+    if (userAgeMSG === 'over') {
+        userAgeMSG = `over ${overAge}`
+    };
+    ticketOfferType.innerText = `Biglietto ${userAgeMSG}`;
+
+    userAge === 'standard' ? ticketTicketPrice.innerText = `${finalPrice.toFixed(2)}€` : ticketTicketPrice.innerHTML = `<del>${ticketPrice.toFixed(2)}€</del><br/>${finalPrice.toFixed(2)}€`;
+
+    if (results.classList.contains('d-none')) results.classList.remove('d-none');
+};
