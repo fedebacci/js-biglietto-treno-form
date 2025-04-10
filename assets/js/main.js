@@ -8,9 +8,18 @@
 // * INFORMAZIONI INIZIALI
 const ticketPriceForKM = 0.21;
 const minorsDiscount = 20;
-const minorsAge = 18;
 const overDiscount = 40;
+// * NON SERVE PIU PER I CALCOLI, MA SOLO PER MOSTRARE NELLA SELECT L'ETA SCELTA (PER I MINORENNI NON SERVE)
 const overAge = 65;
+
+
+// * INSERISCO NELLA SELECT IL VALORE PER GLI OVER IN MODO CHE SI POSSA MODIFICARE L'ETÁ PER LO SCONTO OVER TRAMITE JS
+const overAgeValue = document.querySelector('select');
+// ? CERCO QUALE È LA OPTION A CUI CAMBIARE IL TESTO DINAMICAMENTE. LASCEREI IL CICLO SE DOVESSI FARE UNA COSA PIU COMPLESSA ED ACCETTARE ETA DIVERSE TRAMITE INPUT NUMERICO (COMMIT PRECEDENTE), MA CON LA SELECT POSSO PERMETTERMI DI ANDARE DIRETTAMENTE ALL'ELMENTO INTERESSATO
+// overAgeValue.childNodes.forEach((element) => {
+//     if (element.value === 'over') element.innerText += overAge
+// })
+overAgeValue.childNodes[5].innerText += overAge;
 
 
 // * INPUT PER INFORMAZIONI RICAVATE DALL'UTENTE
@@ -29,23 +38,18 @@ const formUserInputs = document.getElementById('userInputs');
 const btnCalculateTicketPrice = document.getElementById('calculateTicketPrice');
 // console.debug('btnCalculateTicketPrice', btnCalculateTicketPrice);
 btnCalculateTicketPrice.addEventListener('click', function() {
-    calculateTicketPrice(inputUserName.value, inputUserAge.value, minorsAge, minorsDiscount, overAge, overDiscount, inputTripKM.value, ticketPriceForKM)
+    calculateTicketPrice(inputUserName.value, inputUserAge.value, minorsDiscount, overDiscount, inputTripKM.value, ticketPriceForKM);
 })
 
 
 // * FUNZIONE CHE CALCOLA IL PREZZO
-// ! SO CHE FARE UNA FUNZIONE PER CIASCUNA AZIONE È BEN PIÙ CHE ESAGERATO, LO FACCIO PER PRENDERE DIMESTICHEZZA CON LA DOCUMENTAZIONE DELLE FUNZIONI. NELLE PROSSIME VERSIONI DI QUESTO STESSO ESERCIZIO TORNERÓ AD INSERIRE TUTTE QUESTE AZIONI NELLA FUNZIONE PRINCIPALE
-// ! L'UNICA ALTRA FUNZIONE CHE RIMARRÁ SARÁ QUELLA PER CALCOLARE LO SCONTO
-function calculateTicketPrice(userName, userAge, minorsAge, minorsDiscount, overAge, overDiscount, tripKM, ticketPriceForKM) {
-    userAge = parseInt(userAge);
+function calculateTicketPrice(userName, userAge, minorsDiscount, overDiscount, tripKM, ticketPriceForKM) {
     tripKM = parseInt(tripKM);
 
     // console.warn("___________")
     // console.debug('userName', userName);
     // console.debug('userAge', userAge);
-    // console.debug('minorsAge', minorsAge);
     // console.debug('minorsDiscount', minorsDiscount);
-    // console.debug('overAge', overAge);
     // console.debug('overDiscount', overDiscount);
     // console.debug('tripKM', tripKM);
     // console.debug('ticketPriceForKM', ticketPriceForKM);
@@ -55,79 +59,21 @@ function calculateTicketPrice(userName, userAge, minorsAge, minorsDiscount, over
     const errorMessage = "";
     const priceMessage = `Ciao ${userName}, il costo del tuo biglietto è:`;
 
-    let ticketPrice = calculateBasicPrice(tripKM, ticketPriceForKM);
-    // console.debug('ticketPrice', ticketPrice);
+    let ticketPrice = tripKM * ticketPriceForKM;
+    // * LA SALVO IN UN'ALTRA VARIABILE PER AVERE A DISPOSIZIONE ANCHE IL PREZZO INIZIALE DA MOSTRARE SE VIENE APPLICATO UNO SCONTO
+    let finalPrice = ticketPrice;
 
-    const isMinor = checkIfMinor(userAge, minorsAge);
-    // console.debug('isMinor', isMinor);
-    const isOver = checkIfOver(userAge, overAge);
-    // console.debug('isOver', isOver);
-
-
-    if (isMinor) {
-        ticketPrice = calculateDiscountedPrice(ticketPrice, minorsDiscount);
-        // console.debug('ticketPrice CON SCONTO MINORENNI APPLICATO', ticketPrice);
+    if (userAge === 'minor') {
+        finalPrice = calculateDiscountedPrice(ticketPrice, minorsDiscount);
+        console.log(`Prezzo non scontato: ${ticketPrice.toFixed(2)}€`);
     };
-    if (isOver) {
-        ticketPrice = calculateDiscountedPrice(ticketPrice, overDiscount);
-        // console.debug('ticketPrice CON SCONTO OVER APPLICATO', ticketPrice);
+    if (userAge === 'over') {
+        finalPrice = calculateDiscountedPrice(ticketPrice, overDiscount);
+        console.log(`Prezzo non scontato: ${ticketPrice.toFixed(2)}€`);
     };
 
-    // ! TEMPORANEO (SOLO PER VEDERE IL PREZZO NON SCONTATO SE NON MINORENNE O OVER)
-    // if (!isMinor && !isOver) {
-    //     console.debug('ticketPrice SENZA NESSUNO SCONTO APPLICATO', ticketPrice);
-    // }
-
-    console.info(`${priceMessage} ${ticketPrice.toFixed(2)}€`);
+    console.info(`${priceMessage} ${finalPrice.toFixed(2)}€`);
 }
-
-
-
-// * FUNZIONE CHE CALCOLA IL PREZZO BASE DEL BIGLIETTO (SENZA SCONTI APPLICATI)
-/**
- * Funzione che riceve il n° di KM da percorrere ed il prezzo per ciascun KM e restituisce il costo del biglietto senza sconti applicati
- * @param {number} KM Numeroo di KM da percorrere
- * @param {number} priceForKM Prezzo unitario per KM
- * @returns {number} Prezzo pieno calcolato per il biglietto
- */
-function calculateBasicPrice(KM, priceForKM) {
-    // console.debug('KM', KM);
-    // console.debug('priceForKM', priceForKM);
-
-    return KM * priceForKM;
-};
-
-
-
-// * FUNZIONE CHE CONTROLLA SE MINORENNE
-/**
- * Funzione che riceve l'età dell'utente e l'età massima per applicare lo sconto per minorenni e restituisce un valore che indica se è necessario applicare lo sconto per minorenni
- * @param {number} userAge Età dell'utente
- * @param {number} minorsAge Età massima per applicare lo sconto per minorenni
- * @returns {boolean} Valore che indica se bisogna applicare lo sconto per minorenni
- */
-function checkIfMinor(userAge, minorsAge) {
-    // console.debug('userAge', userAge);
-    // console.debug('minorsAge', minorsAge);
-    
-    return userAge < minorsAge;
-};
-
-
-
-// * FUNZIONE CHE CONTROLLA SE OVER
-/**
- * Funzione che riceve l'età dell'utente e l'età minima per applicare lo sconto per gli over e restituisce un valore che indica se è necessario applicare lo sconto per gli over
- * @param {number} userAge Età dell'utente
- * @param {number} overAge Età minima per applicare lo sconto per over
- * @returns {boolean} Valore che indica se bisogna applicare lo sconto per gli over
- */
-function checkIfOver(userAge, overAge) {
-    // console.debug('userAge', userAge);
-    // console.debug('overAge', overAge);
-
-    return userAge > overAge;
-};
 
 
 

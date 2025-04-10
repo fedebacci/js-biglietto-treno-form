@@ -58,9 +58,20 @@
 
 
                         <form id="userInputs" class="my-5">
-                            <input type="text" id="userName" />
-                            <input type="number" id="userAge" />
-                            <input type="number" id="tripKM" />
+                            <input name="userName" type="text" id="userName" />
+                            <!-- <input type="number" id="userAge" /> -->
+                            <select name="userAge" id="userAge">
+                                <option value="standard" selected>
+                                    Standard
+                                </option>
+                                <option value="minor">
+                                    Minorenne
+                                </option>
+                                <option class="over" value="over">
+                                    Over
+                                </option>
+                            </select>
+                            <input name="tripKM" type="number" id="tripKM" />
                         </form>
                         <button id="calculateTicketPrice" class="btn btn-success">
                             Calcola il prezzo del biglietto
