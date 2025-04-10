@@ -1,0 +1,15 @@
+// COMMENTO NORMALE (PER COMMENTARE IL CODICE)
+// ! COMMENTO ERRORE
+// ? COMMENTO DOMANDA
+// * COMMENTO HIGHLIGHT
+// todo COMMENTO TODO
+
+
+// * INFORMAZIONI INIZIALI
+const ticketPriceForKM = 0.21;
+const minorsDiscount = 20;
+const minorsAge = 18;
+const overDiscount = 40;
+const overAge = 65;
+
+// * INPUT PER INFORMAZIONI RICAVATE DALL'UTENTE
