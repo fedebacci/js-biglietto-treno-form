@@ -69,13 +69,15 @@
                                             <label for="userName" class="form-label">
                                                 Inserisci il tuo nome
                                             </label>
-                                            <input type="text" id="userName" name="userName" class="form-control" />
+                                            <input type="text" id="userName" name="userName" class="form-control"
+                                                required />
+                                            <small id="userNameError" class="d-none text-danger">Errore</small>
                                         </div>
                                         <div class="col-4">
                                             <label for="userAge" class="form-label">
                                                 Seleziona la tua fascia di età
                                             </label>
-                                            <select id="userAge" name="userAge" class="form-select">
+                                            <select id="userAge" name="userAge" class="form-select" required>
                                                 <option value="standard" selected>
                                                     Standard
                                                 </option>
@@ -88,10 +90,12 @@
                                             </select>
                                         </div>
                                         <div class="col-4">
-                                            <label for="userName" class="form-label">
+                                            <label for="tripKM" class="form-label">
                                                 Quanti KM devi percorrere?
                                             </label>
-                                            <input type="number" id="tripKM" name="tripKM" class="form-control" />
+                                            <input type="number" id="tripKM" name="tripKM" class="form-control"
+                                                value="0" required />
+                                            <small id="tripKMError" class="d-none text-danger">Errore</small>
                                         </div>
                                     </div>
                                 </form>

@@ -52,6 +52,8 @@ const results = document.getElementById('results');
 const ticketUserName = document.getElementById('ticketUserName');
 const ticketOfferType = document.getElementById('ticketOfferType');
 const ticketTicketPrice = document.getElementById('ticketTicketPrice');
+const userNameError = document.getElementById('userNameError');;
+const tripKMError = document.getElementById('tripKMError');;
 
 
 // * FUNZIONE CHE CALCOLA IL PREZZO
@@ -68,7 +70,31 @@ function calculateTicketPrice(userName, userAge, minorsDiscount, overDiscount, t
     // console.warn("___________")
 
     // todo CONTROLLARE SE CI SONO ERRORI E MOSTRARLI ALL'UTENTE (DOPO AVER FATTO LA PARTE DEL CALCOLO SUPPONENDO DI AVERE I DATI CORRETTI)
-    const errorMessage = "";
+    let error = false;
+    if (!userName) {
+        console.debug("ERRORE USER NAME");
+        inputUserName.classList.add('border-danger');
+        userNameError.classList.remove('d-none');
+        userNameError.innerText = "Inserisci un nome";
+        error = true;
+    } else {
+        inputUserName.classList.remove('border-danger');
+        userNameError.classList.add('d-none');
+    };
+    if (isNaN(tripKM)) {
+        console.debug("ERRORE USER NAME");
+        inputTripKM.classList.add('border-danger');
+        tripKMError.classList.remove('d-none');
+        tripKMError.innerText = "Inserisci un numero di KM da percorrere"
+        error = true;
+    } else {
+        inputTripKM.classList.remove('border-danger');
+        tripKMError.classList.add('d-none');
+    };
+    if (error === true) {
+        return;
+    };
+
     const priceMessage = `Ciao ${userName}, il costo del tuo biglietto è:`;
 
     let ticketPrice = tripKM * ticketPriceForKM;
@@ -137,8 +163,10 @@ function showResults(userName, userAge, overAge, ticketPrice, finalPrice) {
 
 
 function cancelInfo() {
-    inputUserName.value = ""
-    inputUserAge.value = 'standard'
+    inputUserName.value = "";
+    inputUserName.focus();
+    inputUserAge.value = 'standard';
     inputTripKM.value = 0;
+
     if (!results.classList.contains('d-none')) results.classList.add('d-none');
 };
