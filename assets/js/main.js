@@ -37,8 +37,13 @@ const formUserInputs = document.getElementById('userInputs');
 // console.debug('formUserInputs', formUserInputs);
 const btnCalculateTicketPrice = document.getElementById('calculateTicketPrice');
 // console.debug('btnCalculateTicketPrice', btnCalculateTicketPrice);
+const btnCancelInfo = document.getElementById('cancelInfo');
+// console.debug('btnCancelInfo', btnCancelInfo);
 btnCalculateTicketPrice.addEventListener('click', function() {
     calculateTicketPrice(inputUserName.value, inputUserAge.value, minorsDiscount, overDiscount, inputTripKM.value, ticketPriceForKM);
+})
+btnCancelInfo.addEventListener('click', function() {
+    cancelInfo();
 })
 
 
@@ -107,6 +112,7 @@ function calculateDiscountedPrice(initialPrice, discountAmount) {
  * 
  * @param {string} userName Nome dell'utente da mettere sul biglietto
  * @param {string} userAge Tipo di tariffa applicata (Standard/Minor/Over)
+ * @param {number} overAge Età per gli over da mostrare se necessario
  * @param {number} ticketPrice Prezzo del biglietto senza sconti applicati
  * @param {number} finalPrice Prezzo del biglietto con eventuali sconti applicati
  */
@@ -126,4 +132,13 @@ function showResults(userName, userAge, overAge, ticketPrice, finalPrice) {
     userAge === 'standard' ? ticketTicketPrice.innerText = `${finalPrice.toFixed(2)}€` : ticketTicketPrice.innerHTML = `<del>${ticketPrice.toFixed(2)}€</del><br/>${finalPrice.toFixed(2)}€`;
 
     if (results.classList.contains('d-none')) results.classList.remove('d-none');
+};
+
+
+
+function cancelInfo() {
+    inputUserName.value = ""
+    inputUserAge.value = 'standard'
+    inputTripKM.value = 0;
+    if (!results.classList.contains('d-none')) results.classList.add('d-none');
 };
